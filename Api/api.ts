@@ -20,7 +20,8 @@ interface ApiData {
 
 const getPageData = (pageNo: number, pageSize: number): Array<PageData> => {
   const startingIndex: number = (pageNo - 1) * pageSize;
-  return apiData.splice(startingIndex, pageSize);
+  const lastIndex: number = pageNo * pageSize;
+  return apiData.slice(startingIndex, lastIndex);
 };
 
 export const getApiData = (
