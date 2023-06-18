@@ -1,15 +1,17 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {SafeAreaView, StatusBar, StyleSheet} from 'react-native';
 import Header from './components/header';
 import Colors from './themes/colors';
 import Movies from './components/Movies';
 
 function App(): JSX.Element {
+  const [searchInput, setSearchInput] = useState<string>('');
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar backgroundColor={Colors.APP_BACKGROUND} />
-      <Header />
-      <Movies />
+      <Header searchInput={searchInput} onChangeText={setSearchInput} />
+      <Movies searchInput={searchInput} />
     </SafeAreaView>
   );
 }

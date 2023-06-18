@@ -3,6 +3,10 @@ import {FlatList, StyleSheet} from 'react-native';
 import PosterBoard from './PosterBoard';
 import {getApiData} from '../Api/api';
 
+interface Props {
+  searchInput: string;
+}
+
 interface Movie {
   name: string;
   'poster-image': string;
@@ -28,26 +32,52 @@ enum posterImages {
 
 const PAGE_SIZE = 20;
 
-const Movies = () => {
+const Movies = ({searchInput}: Props) => {
   const [movieList, setMovieList] = useState<Array<Movie>>([]);
   const pageNo = useRef<any>(1);
   const areMoreMoviesAvailable = useRef<any>(true);
+  const originalMovieList = useRef<any>(movieList);
 
   const getAndSetMovies = (page: number = 1) => {
     const {
       'content-items': {content},
     } = getApiData(page);
 
-    const newMovieList = movieList.concat(content);
-    setMovieList(newMovieList);
+    const newMovieList = originalMovieList.current.concat(content);
+    originalMovieList.current = newMovieList;
+    if (searchInput) {
+      const filteredMovies = getSearchResult(searchInput, newMovieList);
+      setMovieList(filteredMovies);
+    } else {
+      setMovieList(newMovieList);
+    }
+
     if (content.length < PAGE_SIZE) {
       areMoreMoviesAvailable.current = false;
     }
   };
 
+  const getSearchResult = (
+    searchedInput: string,
+    movies: Movie[] = originalMovieList.current,
+  ) => {
+    return movies?.filter(({name}) =>
+      name.toLocaleLowerCase().includes(searchedInput.toLocaleLowerCase()),
+    );
+  };
+
   useEffect(() => {
     getAndSetMovies(pageNo.current);
   }, []);
+
+  useEffect(() => {
+    if (searchInput) {
+      const filteredMovies = getSearchResult(searchInput);
+      setMovieList(filteredMovies);
+    } else {
+      setMovieList(originalMovieList.current);
+    }
+  }, [searchInput]);
 
   const renderMovieList = ({item}: MovieListProps) => {
     const posterImage = posterImages[item['poster-image']];
@@ -87,8 +117,8 @@ const styles = StyleSheet.create({
     rowGap: 44,
     marginHorizontal: 12,
     justifyContent: 'space-between',
-    paddingBottom: 54,
-    marginTop: 80, // height of Header (100) - 20 (rough dimension of bottom transparent part of the nav_bar.png)
+    paddingBottom: 108,
+    marginTop: 60,
   },
 });
 

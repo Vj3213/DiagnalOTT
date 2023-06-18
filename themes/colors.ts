@@ -1,4 +1,5 @@
 export default {
   APP_BACKGROUND: '#000',
-  WHITE: '#fff',
+  WHITE: '#FFF',
+  TRANSPARENT_WHITE: 'rgba(255, 255, 255, 0.7)',
 };

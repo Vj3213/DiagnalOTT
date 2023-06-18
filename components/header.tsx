@@ -1,37 +1,72 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   ImageBackground,
   StyleSheet,
   Image,
-  View,
   Text,
   Pressable,
+  TextInput,
 } from 'react-native';
 import NavBarBg from '../assets/nav_bar.png';
 import BackBtnImg from '../assets/Back.png';
 import SearchBtnImg from '../assets/search.png';
+import colors from '../themes/colors';
 
-const Header = () => {
+interface Props {
+  searchInput: string;
+  onChangeText: (textString: string) => void;
+}
+
+const Header = (props: Props) => {
+  const {searchInput, onChangeText} = props;
+  const [showSearchBar, setShowSearchBar] = useState<boolean>(false);
+
+  const renderMiddleSection = (showSearchField: boolean) => {
+    if (showSearchField) {
+      return (
+        <TextInput
+          placeholder="The Birds"
+          placeholderTextColor={colors.TRANSPARENT_WHITE}
+          underlineColorAndroid={colors.TRANSPARENT_WHITE}
+          style={styles.searchInput}
+          value={searchInput}
+          onChangeText={onChangeText}
+          autoFocus
+        />
+      );
+    }
+    return <Text style={styles.headerTxt}>Romantic Comedy</Text>;
+  };
+
+  const onPressSearchBtn = () => {
+    onChangeText('');
+    setShowSearchBar(true);
+  };
+
+  const onPressBackBtn = () => {
+    setShowSearchBar(false);
+    onChangeText('');
+  };
+
   return (
     <ImageBackground
       source={NavBarBg}
       style={styles.navBarBg}
       resizeMode="cover">
-      <View style={{flexDirection: 'row', alignItems: 'center'}}>
-        <Pressable style={styles.sideBtnCont}>
-          <Image source={BackBtnImg} style={styles.sideBtnImg} />
-        </Pressable>
-        <View style={{flex: 1}}>
-          <Text style={{color: 'white'}}>Romantic Comedy</Text>
-        </View>
-        <Pressable style={styles.sideBtnCont}>
-          <Image
-            source={SearchBtnImg}
-            style={styles.sideBtnImg}
-            resizeMode="center"
-          />
-        </Pressable>
-      </View>
+      <Pressable
+        disabled={!showSearchBar}
+        style={styles.sideBtnCont}
+        onPress={onPressBackBtn}>
+        <Image source={BackBtnImg} style={styles.sideBtnImg} />
+      </Pressable>
+      {renderMiddleSection(showSearchBar)}
+      <Pressable style={styles.sideBtnCont} onPress={onPressSearchBtn}>
+        <Image
+          source={SearchBtnImg}
+          style={styles.sideBtnImg}
+          resizeMode="cover"
+        />
+      </Pressable>
     </ImageBackground>
   );
 };
@@ -41,19 +76,31 @@ const styles = StyleSheet.create({
     position: 'absolute',
     zIndex: 2,
     width: '100%',
-    height: 100,
+    height: 54,
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'red',
+    paddingHorizontal: 6,
   },
   sideBtnCont: {
-    width: 54,
-    height: 54,
+    width: 36,
+    height: 36,
     justifyContent: 'center',
+    alignItems: 'center',
   },
   sideBtnImg: {
-    width: 54,
-    height: 54,
+    width: 20,
+    height: 20,
+  },
+  searchInput: {
+    flex: 1,
+    color: colors.WHITE,
+    fontSize: 16,
+  },
+  headerTxt: {
+    flex: 1,
+    color: colors.WHITE,
+    fontSize: 20,
+    fontWeight: '300',
   },
 });
 
