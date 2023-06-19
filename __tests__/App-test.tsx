@@ -1,14 +1,102 @@
-/**
- * @format
- */
-
 import 'react-native';
-import React from 'react';
-import App from '../App';
+import {getApiData} from '../Api/api';
 
-// Note: test renderer must be required after react-native.
-import renderer from 'react-test-renderer';
+const pageNo = 1;
+const pageSize = 20;
 
-it('renders correctly', () => {
-  renderer.create(<App />);
+const expectedApiData = {
+  title: 'Romantic Comedy',
+  'total-content-items': 54,
+  'page-num-requested': 1,
+  'page-size-requested': 20,
+  'page-size-returned': 20,
+  'content-items': {
+    content: [
+      {
+        name: 'The Birds',
+        'poster-image': 'poster1.jpg',
+      },
+      {
+        name: 'Rear Window',
+        'poster-image': 'poster2.jpg',
+      },
+      {
+        name: 'Family Pot',
+        'poster-image': 'poster3.jpg',
+      },
+      {
+        name: 'Family Pot',
+        'poster-image': 'poster2.jpg',
+      },
+      {
+        name: 'Rear Window',
+        'poster-image': 'poster1.jpg',
+      },
+      {
+        name: 'The Birds',
+        'poster-image': 'poster3.jpg',
+      },
+      {
+        name: 'Rear Window',
+        'poster-image': 'poster3.jpg',
+      },
+      {
+        name: 'The Birds',
+        'poster-image': 'poster2.jpg',
+      },
+      {
+        name: 'Family Pot',
+        'poster-image': 'poster1.jpg',
+      },
+      {
+        name: 'The Birds',
+        'poster-image': 'poster1.jpg',
+      },
+      {
+        name: 'The Birds',
+        'poster-image': 'poster1.jpg',
+      },
+      {
+        name: 'Rear Window',
+        'poster-image': 'poster2.jpg',
+      },
+      {
+        name: 'Family Pot',
+        'poster-image': 'poster3.jpg',
+      },
+      {
+        name: 'Family Pot',
+        'poster-image': 'poster2.jpg',
+      },
+      {
+        name: 'Rear Window',
+        'poster-image': 'poster1.jpg',
+      },
+      {
+        name: 'The Birds',
+        'poster-image': 'poster3.jpg',
+      },
+      {
+        name: 'Rear Window',
+        'poster-image': 'poster3.jpg',
+      },
+      {
+        name: 'The Birds',
+        'poster-image': 'poster2.jpg',
+      },
+      {
+        name: 'Family Pot',
+        'poster-image': 'poster1.jpg',
+      },
+      {
+        name: 'The Birds',
+        'poster-image': 'poster1.jpg',
+      },
+    ],
+  },
+};
+
+it('Test api data', () => {
+  const actualApiData = getApiData(pageNo, pageSize);
+  expect(actualApiData).toEqual(expectedApiData);
 });
