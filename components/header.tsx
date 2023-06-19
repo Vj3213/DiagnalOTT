@@ -6,6 +6,7 @@ import {
   Text,
   Pressable,
   TextInput,
+  Platform,
 } from 'react-native';
 import NavBarBg from '../assets/nav_bar.png';
 import BackBtnImg from '../assets/Back.png';
@@ -80,6 +81,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 6,
+    marginTop: Platform.OS === 'ios' ? 44 : 0,
   },
   sideBtnCont: {
     width: 36,
